@@ -3,10 +3,26 @@ import pymysql
 def connect_to_db():
     return pymysql.connect(
         host="localhost",
-        user="your_username",
-        password="your_password",
-        database="your_database_name"
+        user="root",
+        password="pass1",
+        database="sample_project"
     )
+
+
+def add_table(name):
+    connection = connect_to_db()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                           CREATE TABLE IF NOT EXISTS users(
+                               id INT AUTO_INCREMENT PRIMARY KEY,
+                               name VARCHAR(255), 
+                               age INT
+                               )
+                           """)
+        connection.commit()
+    finally:
+        connection.close()
 
 def add_user(name, age):
     connection = connect_to_db()
@@ -37,7 +53,7 @@ def delete_user(user_id):
     finally:
         connection.close()
 
-# Example usage
+add_table("users")
 add_user("Alice", 25)
 view_users()
 delete_user(1)
